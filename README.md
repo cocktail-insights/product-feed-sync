@@ -15,7 +15,7 @@ const demoStoreFeed = new ShopifyFeed({
   cloudinaryCloudName: '<cloudinary_cloud_name>',
   cloudinaryApiKey: '<cloudinary_api_key>',
   cloudinaryApiSecret: '<cloudinary_api_secret>',
-  uploadedImages: ['foo', 'bar] // array of public ids of already uploaded images.
+  uploadedImages: ['foo', 'bar'] // array of public ids of already uploaded images.
 });
 
 // Get CSV feed
