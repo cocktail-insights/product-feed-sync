@@ -1,4 +1,4 @@
-AdGeek Logger
+Facebook Product Feed Sync
 =========
 
 Generate RSS and CSV feeds for Shopify (other platforms coming soon) products.
