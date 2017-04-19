@@ -1,4 +1,4 @@
-Facebook Product Feed Sync
+Product Feed Sync
 =========
 
 Generate RSS and CSV feeds for Shopify (other platforms coming soon) products.
