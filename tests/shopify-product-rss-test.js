@@ -13,7 +13,8 @@ describe('ShopifyFeed', function () {
       cloudinaryCloudName: 'foobar-cloudname',
       cloudinaryAPIKey: '3142',
       cloudinaryAPISecret: 'supersecretkey',
-      uploadedImages: ['foo', 'bar']
+      uploadedImages: ['foo', 'bar'],
+      optimize: false,
     };
   });
 
