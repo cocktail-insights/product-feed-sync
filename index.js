@@ -1,8 +1,5 @@
 'use strict'
 
-//import { Shopify } from 'shopify-api-node';
-//import { crypto } from 'crypto';
-
 const Shopify = require('shopify-api-node');
 const crypto = require('crypto');
 const json2csv = require('json2csv');
@@ -26,6 +23,7 @@ const cloudinary = require('cloudinary');
  * @param {String} options.cloudinaryAPIKey - API Key from Cloudinary
  * @param {String} options.cloudinaryAPISecret - API Secret from Cloudinary
  * @param {String[]} options.uploadedImages - Array of public IDs of images already uploaded to Cloudinary
+ * @param {Boolean} options.optimize - Optimize Images
  * @constructor
  * @public
  */
@@ -43,8 +41,10 @@ class ShopifyFeed {
     ) {
       throw new Error('Missing or invalid options');
     }
-
-    this.options = options;
+    // check for optimize, a boolean, breaks if. Setting default to false, to be overriden by options.optimize if available
+    this.options = Object.assign({}, {
+      optimize: false
+    }, options);
   }
 
 
@@ -157,38 +157,45 @@ function getPublicIdFromImageUrl(imageUrl) {
  * @param {String} options.cloudinaryCloudName - The cloudinary subdomain domain name
  * @param {String} options.cloudinaryAPIKey - The cloudinary API key
  * @param {String} options.cloudinaryAPISecret - The cloudinary API secret
+ * @param {String[]} options.uploadedImages - Public ID array of already uploaded images
+ * @param {Boolean} options.optimize - Optimize images using cloudinary or not
  * @returns {Promise}
  */
-function doCheckAndUpload(imageUrl, options) {
-  let public_id = getPublicIdFromImageUrl(imageUrl);
-  let imageExists = options.uploadedImages.includes(public_id);
+function doCheckAndUpload(imageURL, options) {
   return new Promise((resolve, reject) => {
-    if (!imageExists) {
+    let public_id = getPublicIdFromImageUrl(imageURL);
+    let imageExists = options.uploadedImages.includes(public_id);
+    if (!imageExists && options.optimize) { // TODO: Add Check for threshhold
       cloudinary.config({
         cloud_name: options.cloudinaryCloudName,
         api_key: options.cloudinaryAPIKey,
         api_secret: options.cloudinaryAPISecret
       });
-      console.log('uloading...')
-      cloudinary.uploader.upload(imageUrl, (result) => {
-        // console.log(result);
+      cloudinary.uploader.upload(imageURL, (result) => {
         result && resolve({
           public_id,
-          cloudinaryURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${result.public_id}`
+          imageURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${result.public_id}`
         });
         !result && reject(new Error('Something went wrong with upload.'));
       }, {
-        public_id
+        public_id,
+        width: 1080,
+        height: 1080,
+        crop: 'scale'
+      });
+    } else if (imageExists) {
+      resolve({
+        public_id: null,
+        imageURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${public_id}`
       });
     } else {
       resolve({
         public_id: null,
-        cloudinaryURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${public_id}`
+        imageURL
       });
     }
   });
 }
-
 
 /**
  *
@@ -201,6 +208,7 @@ function getCloudinaryImageLink(publicId) {
   // find public_id in Atachments collection
   return 'ImageURL';
 }
+
 /**
  *
  * Retrieve all products from Shopify
@@ -344,7 +352,7 @@ function parseProducts(products, options) {
     return doCheckAndUpload(product.images[0].src, options)
       .then(({
         public_id,
-        cloudinaryURL
+        imageURL
       }) => {
         public_id && savedImages.push(public_id);
         const variant = product.variants[0];
@@ -353,7 +361,7 @@ function parseProducts(products, options) {
           availability: 'in stock', // availability is always 'in stock' as only stocked products are filtered
           condition: 'new',
           description: product.body_html,
-          image_link: cloudinaryURL,
+          image_link: imageURL,
           link: `https:\/\/${utils.shopNameToDomain(options.shop)}\/products/${product.handle}`,
           mpn: variant.sku,
           gtin: variant.barcode,
