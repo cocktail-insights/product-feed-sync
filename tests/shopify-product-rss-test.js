@@ -10,9 +10,11 @@ describe('ShopifyFeed', function () {
       accessToken: 'weoi2048104nx0djdioDijIDoIJ',
       sharedSecret: 'weoidcndisos',
       currency: 'USD',
-      cloudinaryCloudName: 'foobar-cloudname',
-      cloudinaryAPIKey: '3142',
-      cloudinaryAPISecret: 'supersecretkey',
+      cloudinary: {
+        cloudName: 'foobar-cloudname',
+        apiKey: '3142',
+        apiSecret: 'supersecretkey',
+      },
       uploadedImages: ['foo', 'bar'],
       optimize: false,
     };
@@ -60,22 +62,22 @@ describe('ShopifyFeed', function () {
       }).should.throw();
     });
 
-    it('show throw an error if cloudinaryCloudName is not a field in the parameter object', function () {
-      delete options.cloudinaryCloudName;
+    it('show throw an error if cloudinary.cloudName is not a field in the parameter object', function () {
+      delete options.cloudinary.cloudName;
       (function () {
         const rss = new ShopifyFeed(options);
       }).should.throw();
     });
 
-    it('show throw an error if cloudinaryAPIKey is not a field in the parameter object', function () {
-      delete options.cloudinaryAPIKey;
+    it('show throw an error if cloudinary.apiKey is not a field in the parameter object', function () {
+      delete options.cloudinary.apiKey;
       (function () {
         const rss = new ShopifyFeed(options);
       }).should.throw();
     });
 
-    it('show throw an error if cloudinaryAPISecret is not a field in the parameter object', function () {
-      delete options.cloudinaryAPISecret;
+    it('show throw an error if cloudinary.apiSecret is not a field in the parameter object', function () {
+      delete options.cloudinary.apiSecret;
       (function () {
         const rss = new ShopifyFeed(options);
       }).should.throw();
