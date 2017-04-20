@@ -19,9 +19,9 @@ const cloudinary = require('cloudinary');
  * @param {String} options.shop - The .myshopify.com domain of the shop
  * @param {String} options.accessToken - Access token for making api calls to shop
  * @param {String} options.sharedSecret - Secret token for Public shopify app
- * @param {String} options.cloudinaryCloudName - Cloud name from Cloudinary
- * @param {String} options.cloudinaryAPIKey - API Key from Cloudinary
- * @param {String} options.cloudinaryAPISecret - API Secret from Cloudinary
+ * @param {String} options.cloudinary.cloudName - Cloud name from Cloudinary
+ * @param {String} options.cloudinary.apiKey - API Key from Cloudinary
+ * @param {String} options.cloudinary.apiSecret - API Secret from Cloudinary
  * @param {String[]} options.uploadedImages - Array of public IDs of images already uploaded to Cloudinary
  * @param {Boolean} options.optimize - Optimize Images
  * @constructor
@@ -34,9 +34,9 @@ class ShopifyFeed {
       !options.currency ||
       !options.accessToken ||
       !options.sharedSecret ||
-      !options.cloudinaryCloudName ||
-      !options.cloudinaryAPIKey ||
-      !options.cloudinaryAPISecret ||
+      !options.cloudinary.cloudName ||
+      !options.cloudinary.apiKey ||
+      !options.cloudinary.apiSecret ||
       !options.uploadedImages
     ) {
       throw new Error('Missing or invalid options');
@@ -143,7 +143,7 @@ function removeAll(word, ...search) {
 function getPublicIdFromImageUrl(imageUrl) {
   let lastSlashPosition = imageUrl.lastIndexOf('/');
   let unsafeUniqueName = imageUrl.substring(lastSlashPosition + 1, imageUrl.length);
-  let safeUniqueName = removeAll(unsafeUniqueName, '\\.', '\\?', '\\=', 'png', 'v');
+  let safeUniqueName = removeAll(unsafeUniqueName, '\\.', '\\?', '\\=', 'v');
 
   return safeUniqueName;
 }
@@ -154,9 +154,9 @@ function getPublicIdFromImageUrl(imageUrl) {
  * Checks if image has already been uploaded to Cloudinary and uploads if not.
  *
  * @param {String} imageUrl - Image's URL
- * @param {String} options.cloudinaryCloudName - The cloudinary subdomain domain name
- * @param {String} options.cloudinaryAPIKey - The cloudinary API key
- * @param {String} options.cloudinaryAPISecret - The cloudinary API secret
+ * @param {String} options.cloudinary.cloudName - The cloudinary subdomain domain name
+ * @param {String} options.cloudinary.apiKey - The cloudinary API key
+ * @param {String} options.cloudinary.apiSecret - The cloudinary API secret
  * @param {String[]} options.uploadedImages - Public ID array of already uploaded images
  * @param {Boolean} options.optimize - Optimize images using cloudinary or not
  * @returns {Promise}
@@ -167,14 +167,14 @@ function doCheckAndUpload(imageURL, options) {
     let imageExists = options.uploadedImages.includes(public_id);
     if (!imageExists && options.optimize) { // TODO: Add Check for threshhold
       cloudinary.config({
-        cloud_name: options.cloudinaryCloudName,
-        api_key: options.cloudinaryAPIKey,
-        api_secret: options.cloudinaryAPISecret
+        cloud_name: options.cloudinary.cloudName,
+        api_key: options.cloudinary.apiKey,
+        api_secret: options.cloudinary.apiSecret
       });
       cloudinary.uploader.upload(imageURL, (result) => {
         result && resolve({
           public_id,
-          imageURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${result.public_id}`
+          imageURL: `https://res.cloudinary.com/${options.cloudinary.cloudName}/image/upload/${result.public_id}`
         });
         !result && reject(new Error('Something went wrong with upload.'));
       }, {
@@ -186,7 +186,7 @@ function doCheckAndUpload(imageURL, options) {
     } else if (imageExists) {
       resolve({
         public_id: null,
-        imageURL: `https://res.cloudinary.com/${options.cloudinaryCloudName}/image/upload/${public_id}`
+        imageURL: `https://res.cloudinary.com/${options.cloudinary.cloudName}/image/upload/${public_id}`
       });
     } else {
       resolve({
@@ -326,9 +326,9 @@ function generateCSV(options, products) {
  * @param [Object] products - List of all products
  * @param {String} options.shop - Shopify domain url
  * @param {String} options.currency - The default currency used by shop
- * @param {String} options.cloudinaryCloudName - The cloudinary subdomain domain name
- * @param {String} options.cloudinaryAPIKey - The cloudinary API key
- * @param {String} options.cloudinaryAPISecret - The cloudinary API secret
+ * @param {String} options.cloudinary.cloudName - The cloudinary subdomain domain name
+ * @param {String} options.cloudinary.apiKey - The cloudinary API key
+ * @param {String} options.cloudinary.apiSecret - The cloudinary API secret
  * @returns {Promise}
  */
 function parseProducts(products, options) {
