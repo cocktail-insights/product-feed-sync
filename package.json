@@ -8,7 +8,7 @@
     "compile": "babel --out-dir dist lib --copy-files",
     "lint": "eslint lib",
     "test": "mocha tests --recursive",
-    "prepare": "npm run compile"
+    "postinstall": "npm run compile"
   },
   "keywords": [
     "shopify",
