@@ -3,6 +3,12 @@ Product Feed Sync
 
 Generate RSS and CSV feeds for Shopify (other platforms coming soon) products.
 
+## Installation
+
+```bash
+$ npm install --save cocktail-insights/product-feed-sync
+```
+
 ## Usage
 ```javascript
 const ShopifyFeed = require('product-feed-sync');
