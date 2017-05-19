@@ -1,4 +1,4 @@
-const ShopifyFeed = require('../index');
+const ShopifyFeed = require('../dist/index');
 const should = require('should');
 const crypto = require('crypto');
 

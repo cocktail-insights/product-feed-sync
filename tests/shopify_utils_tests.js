@@ -1,11 +1,11 @@
-const utils = require('../shopify_utils');
-const constants = require('../constants');
+const utils = require('../dist/shopify_utils');
+const constants = require('../dist/constants');
 const should = require('should');
 
-describe('#objectToString', function() {
-  it('should return `foo=bar` when passed {foo: bar}', function() {
+describe('#objectToString', () => {
+  it('should return `foo=bar` when passed {foo: bar}', () => {
     const object = {
-      foo: 'bar'
+      foo: 'bar',
     };
 
     const stringifiedObject = utils.objectToString(object);
@@ -13,17 +13,17 @@ describe('#objectToString', function() {
   });
 });
 
-describe('#arrayToObject', function() {
-  it('should return object when passed an array', function() {
+describe('#arrayToObject', () => {
+  it('should return object when passed an array', () => {
     const array = ['foo', 'bar'];
 
     utils.arrayToObject(array).should.have.properties('foo', 'bar');
   });
 
-  it('should return keys of constants object when passed constants.split(\',\')', function() {
+  it('should return keys of constants object when passed constants.split(\',\')', () => {
     const array = constants.csvFields.split(',');
 
     const transformedArray = utils.arrayToObject(array);
     transformedArray.should.be.an.Object;
-  })
+  });
 });
