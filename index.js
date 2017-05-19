@@ -126,7 +126,7 @@ ShopifyFeed.isValidSignature = function (query, sharedSecret) {
  * @param {String[]} search - Character(s) to be removed
  * @returns {String}
  */
-function removeAll(word, ...search) {
+function removeAll(word, search) {
   return search.reduce((currentWord, searchSequence) => {
     return currentWord.replace(new RegExp(searchSequence, 'g'), '');
   }, word)
@@ -143,7 +143,7 @@ function removeAll(word, ...search) {
 function getPublicIdFromImageUrl(imageUrl) {
   let lastSlashPosition = imageUrl.lastIndexOf('/');
   let unsafeUniqueName = imageUrl.substring(lastSlashPosition + 1, imageUrl.length);
-  let safeUniqueName = removeAll(unsafeUniqueName, '\\.', '\\?', '\\=', 'v');
+  let safeUniqueName = removeAll(unsafeUniqueName, ['\\.', '\\?', '\\=', 'v']);
 
   return safeUniqueName;
 }
