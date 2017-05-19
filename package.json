@@ -8,7 +8,7 @@
     "compile": "babel --out-dir dist lib --copy-files",
     "lint": "eslint lib",
     "test": "mocha tests --recursive",
-    "postinstall": "npm run compile"
+    "prepare": "npm run compile"
   },
   "keywords": [
     "shopify",
@@ -28,14 +28,14 @@
     "json2csv": "^3.7.0",
     "rss": "^1.2.1",
     "shopify-api-node": "^2.2.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.1.0",
     "should": "^11.1.0",
-    "babel-cli": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
