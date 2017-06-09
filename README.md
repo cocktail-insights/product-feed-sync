@@ -18,10 +18,10 @@ const demoStoreFeed = new ShopifyFeed({
   currency: 'USD',
   accessToken: '<shopify_access_token>',
   sharedSecret: '<shopify_shared_secret>',
-  cloudinaryCloudName: '<cloudinary_cloud_name>',
-  cloudinaryApiKey: '<cloudinary_api_key>',
-  cloudinaryApiSecret: '<cloudinary_api_secret>',
-  uploadedImages: ['foo', 'bar'] // array of public ids of already uploaded images.
+  cloudinaryCloudName: '<cloudinary_cloud_name>', // optional
+  cloudinaryApiKey: '<cloudinary_api_key>', // optional
+  cloudinaryApiSecret: '<cloudinary_api_secret>', // optional
+  uploadedImages: ['foo', 'bar'] // array of public ids of already uploaded images (optional)
 });
 
 // Get CSV feed
