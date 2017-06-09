@@ -1,6 +1,6 @@
 {
   "name": "product-feed-sync",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Create RSS/CSV of update to date products with variants for use in Facebook Product Catalog",
   "main": "./dist",
   "scripts": {
